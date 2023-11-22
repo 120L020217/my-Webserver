@@ -368,6 +368,13 @@ int pthread_attr_setdetachstate(pthread_attr_t * attr);
 int pthread_attr_getdetachstate(pthread_attr_t* attr);
 ```
 
+#### 线程同步
+**临界区**：访问某一个共享资源片段时，这段代码应为原子操作。也就是同时访问同一共享资源的其他线程不应中断该片段的执行。
+线程同步的实现方式：  
+1）互斥量（锁）  
+相当于一个二进制信号量（只有0和1的信号量）。
+2）条件变量  
+3）信号量  
 ### 四、IO多路复用
 IO多路复用技术能**同时监听多个文件描述符**，能够提高程序性能。Linux下实现IO多路复用的三个系统调用select、poll、epoll。
 + select
