@@ -344,6 +344,28 @@ int pthread_equal(pthread_t t1, pthread_t t2)
  * pthread_exit返回一个指针,指向他想返回的值,在主线程中我们就需要一个指针来接这个返回的指针.然而,如果传入指针的话,只是形参接住了这个指针,实参不会有变化.所以要用二级指针确保实参接到这个二级指针.
  */
 int pthread_join(pthread_t thread, void** retval);
+
+/**
+ * 分离一个线程，被分离的线程终止，自动释放资源给系统
+ * 一个线程不能多次分离
+ * 不能连接已分离的线程
+ */ 
+int pthread_detach(pthread_t thread);
+
+/**
+ * 取消某个线程，可以终止某个线程运行。但不是立刻终止，而是线程走到一个去小店，线程才会终止
+ * 取消点：系统规定的一组系统调用。粗略地认为是用户态转内核态的点
+ */ 
+int pthread_cancel(pthread_t thread);
+
+// 初始化线程属性的资源
+int pthread_attr_init(pthread_attr_t *attr);
+// 释放线程属性资源
+int pthread_attr_destroy(pthread_attr_t *attr);
+// get线程分离状态属性
+int pthread_attr_setdetachstate(pthread_attr_t * attr);
+// set 线程分离状态属性
+int pthread_attr_getdetachstate(pthread_attr_t* attr);
 ```
 
 ### 四、IO多路复用
