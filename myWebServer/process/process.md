@@ -376,6 +376,20 @@ int pthread_attr_getdetachstate(pthread_attr_t* attr);
 2) 读写锁  
 读写锁：读写锁是一把锁。但他的行为分为加读锁和加写锁两种。当有线程读数据，允许其他线程加读锁，不允许其他线程加写锁。当有线程写数据，不允许其他任何线程加读锁和写锁。当不同线程分别由加读锁和加写锁的请求时，加写锁优先级高。  
 3）条件变量  
+条件变量不是锁，他能在条件满足时阻塞/唤醒线程。
+```cpp
+pthread_cond_t
+// 等待目标条件变量
+// mutex是用于保护条件变量的互斥锁，确保wait操作原子性
+// wait函数调用前保证mutex已经上锁，wait函数首先把调用线程放在条件变量的等待队列中，然后将mutex解锁，这样保证了从wait开始执行到调用线程放入等待队列这段时间，signal、broadcast等函数不会修改条件变量，即wait函数不会错过目标条件变量的任何变化。wait返回时，mutex再次被锁上(内部调用mutex的lock函数上锁)。
+int pthread_cond_wait(pthread_cond_t *restrict cond,pthread_mutex_t *restrict mutex);
+// 唤醒一个等待目标文件的线程
+// 若没有任何线程阻塞在条件变量的队列中，则这个信号不会有任何影响，也不会对未来加入阻塞队列的线程有任何影响
+int pthread_cond_signal(pthread_cond_t *cond);
+// 以广播方式唤醒所有等待目标条件的线程
+int pthread_cond_broadcast(pthread_cond_t cond);
+
+```
 4）信号量  
 
 #### ulimit命令
