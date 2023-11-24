@@ -370,7 +370,7 @@ int pthread_attr_getdetachstate(pthread_attr_t* attr);
 
 #### 线程同步
 **临界区**：访问某一个共享资源片段时，这段代码应为原子操作。也就是同时访问同一共享资源的其他线程不应中断该片段的执行。
-线程同步的实现方式：  
+线程同步的相关机制：  
 1）互斥量（锁）  
 相当于一个二进制信号量（只有0和1的信号量）。  
 2) 读写锁  
@@ -391,6 +391,18 @@ int pthread_cond_broadcast(pthread_cond_t cond);
 
 ```
 4）信号量  
+信号量主要作用是阻塞线程，单独使用不能解决线程安全问题。
+```cpp
+sem_t
+// pshared：表明信号量用在多线程之间还是多进程之间
+int sem_int(sem_t *sem, int pshared, unsigned int value);
+int sem_destroy(sem_t* sem);
+// 原子操作的方式将信号量减1，如果信号量为0，线程阻塞
+int sem_wait(sem_t *sem);
+// 原子操作的方式将信号量加1。当信号量值大于0，原本调用wait等待信号量的线程将被唤醒。
+int sem_post(sem_t *sem);
+int sem_getvalue()
+```
 
 #### ulimit命令
 用于设置或显示用户级别的资源限制。
