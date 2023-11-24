@@ -5,3 +5,4 @@
 5. rwLock.cpp: 读写锁优化互斥量解决线程安全问题
 6. core.*: 调试prodcons的转储文件
 7. README.md: 本文件
+8. peterson.cpp: Peterson算法实现共享资源的原子操作，保护信号量。
