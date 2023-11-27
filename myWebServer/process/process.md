@@ -280,7 +280,7 @@ $\qquad$管道中无数据：
 $\qquad\qquad$写端被全部关闭，read返回0（相当于读到文件末尾）  
 $\qquad\qquad$写段没有全部关闭，read阻塞等待  
 写管道：  
-$\qquad$管道读端全部关闭，进程收到SIGPIPE信号  
+$\qquad$管道读端全部关闭，进程收到SIGPIPE信号。管道破裂  
 $\qquad$管道读端没有全部关闭  
 $\qquad\qquad$管道已满，write阻塞  
 $\qquad\qquad$管道未满，write将数据写入，返回实际写入的字数 
