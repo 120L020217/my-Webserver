@@ -35,11 +35,21 @@ int main(int argc, char* argv[]) {
     int ret = bind(sock, (struct sockaddr*)&address, sizeof(address));
     assert(ret!=-1);
 
+    /**
+     * @brief 第二个参数backlog，内核监听队列中ESTABLISHED状态的socket的最大长度，如果超过backlog，
+     * 服务器将不接受新的连接（客户的connect函数），客户端也受到ECONNREFUSED错误信息。
+     * 但实际运行中，最大长度往往比backlog指示的值略大
+     * 内核监听队列中，处于SYN_RCVD状态的最大数量由/proc/sys/net/ipv4/tcp_max_syn_backlog内核参数定义
+     */
     ret = listen(sock, 5);
     assert(ret != -1);
     
     struct sockaddr_in client;
     socklen_t client_addrlength = sizeof (client);
+    /**
+     * @brief 从监听队列中取一个ESTABLISHED，接受一个连接，并建立一个新的socket用来和他通信
+     * 
+     */
     int connfd = accept(sock, (struct sockaddr*)&client, &client_addrlength);
     if (connfd < 0) {
         printf( "errno is: %d\n", errno);

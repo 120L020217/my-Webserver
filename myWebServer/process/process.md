@@ -305,6 +305,8 @@ void abort(void)
 // 定时器与进程的状态无关，当进程被调度时，系统时钟仍然在运行，并且alarm 的计时器仍然在减少。
 unsigned int alarm(unsigned int seconds);
 // ./alarm1:向终端写入数据，在本地连接的远程服务器上测试，while循环大概执行了2万次
+// ./alarm1 >> alarm1.txt:向文件中写数据，while循环大概执行了1400万次
+// ./alarm1+ :单纯的计数，while循环了5800万次
 // 
 int setitimer(int which, const struct itimer *new_val, const struct itimer *old_val);
 ```
@@ -469,6 +471,34 @@ ulimit -c unlimited
 ### 四、IO多路复用
 IO多路复用技术能**同时监听多个文件描述符**，能够提高程序性能。Linux下实现IO多路复用的三个系统调用select、poll、epoll。
 + select
-
+核心思路：  
+1. 构造一个文件描述符列表，将要监听的文件描述符添加到列表中。
+2. 调用一个系统函数，监听列表中的文件描述符，直到有一个或多个描述符io操作，才返回  
+    a. 函数是阻塞的  
+    b. 内核完成对文件描述符的检测
+3. 返回有多少个文件描述符要进行io操作。
+```cpp
+#include <sys/select.h>
+int select(int nfds, fd_set *readfds, fd_set *writefds,
+                  fd_set *exceptfds, struct timeval *timeout);
+/** nfds:select要监听的所有文件描述符中最大值+1
+ * readfds:可读事件对应的文件描述符集合，检测的是读缓冲区有没有数据
+ * writefds：可写事件···，检测写缓冲区是否还能写数据（满不满）
+ * exeptfds：异常事件···，只有一种，就是socket上的带外数据
+ * timeout：设置select函数的超时时间
+ *          struct timeval {
+ *              long tv_sec;
+ *              long tv_usec;
+ *          }
+ *          - NULL: select一直阻塞，直到某文件描述符就绪
+ *          - tv_sec = 0, tv_usec = 0, select不阻塞
+ *          - tv_sec > 0, tv_usec > 0, select阻塞时间
+ * 
+ * fd_set: 内部是一个long型的数组，共有1024位，每位对应一个文件描述符，0表示不需要检查，1表示需要检查。内核遍历这个数组，找到所有设为1的位置，检查对应的文件描述符，如果有事件发生，保持1不变，否则改为0。这样返回后，用户程序检查哪些位是1，就知道那些文件描述符有事件发生。从而完成了同时监听多路io。
+ * @return ：就绪文件描述符（可读+可写+异常 文件描述符总数）
+ */
+```
+![avatar](../Resources/6.png)
 + poll
+
 + epoll
