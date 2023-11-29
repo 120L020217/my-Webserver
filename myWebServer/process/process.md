@@ -273,7 +273,8 @@ pid_t wait(pid_t pid, int *wstatus, int options);
 管道实质上是**内核中**一个有一定存储能力的缓冲区。
 一个管道是一个**字节流**，读进程可以从管道中读取任意大小的数据，而不必与写进程每次向管道中写的数据大小保持一致。
 管道中的数据是顺序的，且必须顺序访问数据，不可随机访问，数据一经读走就被管道抛弃（环形队列实现）。
-管道是单向的（半双工：同一时刻，数据只能朝一个方向流动）。  
+管道是单向的（半双工：同一时刻，数据只能朝一个方向流动）。 
+管道两端的文件描述符默认是阻塞的。   
 读管道：  
 $\qquad$管道中有数据，read返回实际读到的字节数  
 $\qquad$管道中无数据：  
@@ -499,6 +500,26 @@ int select(int nfds, fd_set *readfds, fd_set *writefds,
  */
 ```
 ![avatar](../Resources/6.png)
+内核判断文件描述符是否有可读可写事件发生的具体规则如下：
+![avatar](../Resources/7.png)
 + poll
-
+select方式的局限性：  
+1. 每次调用select，要把fds从用户区拷贝到内核区。
+2. 每次调用select，要在内核中遍历所有的fd
+3. select最多支持1024个文件描述符
+4. 内核可能修改fds集合，每次调用select要重新初始化fds  
+poll是对select的改进
+```cpp
+#include <poll.h>
+struct polled {
+    int fd; /*委托内核检测的文件描述符*/
+    short events; /*委托内核检测的事件类型*/
+    short revents; /*实际发生的事件*/
+};
+int poll(struct polled *fds, nfds_t nfds, int timeout);
+/**
+ * fds：指向需要检测的文件描述符的的结构体数组
+ * nfds: 指示监听文件描述符集合大小
+*/ 
+```
 + epoll
