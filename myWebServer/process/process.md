@@ -459,7 +459,7 @@ int sem_wait(sem_t *sem);
 int sem_post(sem_t *sem);
 int sem_getvalue()
 ```
-
+\*注：原子操作的实现在*哈工大操作系统李志军，第二部分*
 
 
 #### ulimit命令
@@ -503,12 +503,12 @@ int select(int nfds, fd_set *readfds, fd_set *writefds,
 内核判断文件描述符是否有可读可写事件发生的具体规则如下：
 ![avatar](../Resources/7.png)
 + poll
+poll是对select的改进
 select方式的局限性：  
 1. 每次调用select，要把fds从用户区拷贝到内核区。
 2. 每次调用select，要在内核中遍历所有的fd
 3. select最多支持1024个文件描述符
 4. 内核可能修改fds集合，每次调用select要重新初始化fds  
-poll是对select的改进
 ```cpp
 #include <poll.h>
 struct polled {
@@ -523,3 +523,4 @@ int poll(struct polled *fds, nfds_t nfds, int timeout);
 */ 
 ```
 + epoll
+epoll是对poll的改进
