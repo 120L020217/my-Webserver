@@ -523,4 +523,20 @@ int poll(struct polled *fds, nfds_t nfds, int timeout);
 */ 
 ```
 + epoll
-epoll是对poll的改进
+epoll是对poll的改进  
+```cpp
+#include <sys/epoll.h>
+int epoll_create(int size);
+
+int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
+
+int epoll_wait(int epfd, struct epoll_event* events, int maxevents, int timeout);
+```
+epoll_create创建一个内核事件表，返回这个表的文件描述符epfd，以便后续访问。这个内核事件表的数据结构就是eventpoll，他有俩个重要的字段，一个是红黑树的根rbr，一个是就绪双端队列的头rdllist。红黑树用来保存要监听的文件描述符，就绪队列是消息就绪的文件描述符的队列。  
+epoll_ctl用来注册文件描述符fd和要监听的事件event。（*epoll优于poll、select在于：每次调用epoll_ctl并不会把所有的要监听的文件描述符从用户态拷贝到内核态，而只是拷贝添加/调整的文件描述符*）epoll_ctl同时会注册回调函数，当事件就绪时，调用回调函数（*epoll优于poll、select在于：不必主动轮询文件描述符是否就绪，采用回调机制*）  
+当网卡收到信息，将数据拷贝到内核缓冲区时，epoll通过回调函数把就绪的文件描述符连接到双端队列。从红黑树到双端队列不是拷贝，而只是修改指针指向。因为epoll模型使用的epitem数据结构，红黑树和双端队列都在这个结构当中，虽然图中画的红黑树和双端队列分开，但这是为了方便理解。  
+epoll_wait将就绪队列中的时间事件到参数events指向的用户态内存中（*epoll优于poll、select在于：epoll只把就绪的文件描述符从内核态拷贝，而pollselect拷贝所有的文件描述符，需要用户判断哪些事件描述符已就绪*）  
+ET(边沿触发)和LT（电平触发）  
+ET因为降低了同一个epoll事件被重复触发的次数，因此效率比LT高。
+![avatar](../Resources/8.png)
+![avatar](../Resources/9.png)
