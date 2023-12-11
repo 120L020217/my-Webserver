@@ -3,8 +3,21 @@
 /* 升序定时器链表 */
 #include <time.h>
 #include <stdio.h>
-// #include <sys/socket.h>
 #include <netinet/in.h>
+
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <assert.h>
+#include <signal.h>
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <sys/epoll.h>
+#include <pthread.h>
+
 #define BUFFER_SIZE 64
 class util_timer; /*前向声明*/
 
@@ -51,6 +64,7 @@ private:
     util_timer *head;
     util_timer *tail;
 };
+
 
 
 #endif

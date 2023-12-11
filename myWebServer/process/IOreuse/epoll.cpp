@@ -34,6 +34,7 @@ void addfd(int epollfd, int fd, bool enable_et) {
     }
     epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &event);
     // setnoblocking(fd);
+    setnoblocking(fd);
 } 
 
 // LT
@@ -83,6 +84,7 @@ void et(epoll_event* events, int number, int epollfd, int listenfd) {
                 memset(buf, '\0', BUFFER_SIZE);
                 int ret = recv(sockfd, buf, BUFFER_SIZE - 1, 0);
                 if (ret < 0) {
+                    /*还有数据没读完*/
                     if ( errno == EAGAIN || errno == EWOULDBLOCK) {
                         printf("read later\n");
                         break;

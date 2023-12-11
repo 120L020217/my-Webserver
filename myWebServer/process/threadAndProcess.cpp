@@ -17,6 +17,7 @@ void* another(void *arg) {
     pthread_mutex_lock(&mutex);
     sleep(5);
     pthread_mutex_unlock(&mutex);
+    printf("test\n");
 }
 
 int main() {

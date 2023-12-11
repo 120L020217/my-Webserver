@@ -49,7 +49,7 @@ public:
         return pthread_mutex_unlock(&m_mutex) == 0;
     }
     //TODO:
-    /*block 阻塞队列模块：(用途是什么)*/
+    /*block 阻塞队列模块：返回内部封装的锁，用于条件变量的wait函数*/
     pthread_mutex_t *get() {
         return &m_mutex;
     }
