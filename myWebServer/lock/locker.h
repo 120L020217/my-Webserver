@@ -48,8 +48,7 @@ public:
     bool unlock() {
         return pthread_mutex_unlock(&m_mutex) == 0;
     }
-    //TODO:
-    /*block 阻塞队列模块：返回内部封装的锁，用于条件变量的wait函数*/
+    //TODO:/*block 阻塞队列模块：返回内部封装的锁，用于条件变量的wait函数*/
     pthread_mutex_t *get() {
         return &m_mutex;
     }
@@ -75,14 +74,14 @@ public:
     /*传入一个已经上好锁的参数 m_mutex*/
     bool wait(pthread_mutex_t *m_mutex) {
         int ret = 0; 
-        // pthread_mutex_lodk(&m_mutex);
+        // pthread_mutex_lock(&m_mutex);
         ret = pthread_cond_wait(&m_cond, m_mutex);
         
         return ret == 0;
     }
     bool timewait(pthread_mutex_t *m_mutex, struct timespec t) {
         int ret = 0;
-        // pthread_mutex_lodk(&m_mutex);
+        // pthread_mutex_lock(&m_mutex);
         ret = pthread_cond_timedwait(&m_cond, m_mutex, &t);
         
         return ret == 0;

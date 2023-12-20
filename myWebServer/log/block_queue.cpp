@@ -60,7 +60,7 @@ bool block_queue<T>::front(T& value) {
         m_mutex.unlock();
         return false;
     }
-    value = m_array[m_front];
+    value = m_array[m_front+1];
     m_mutex.unlock();
     return true;
 }
@@ -124,8 +124,8 @@ bool block_queue<T>::pop(T& item) {
         }
     }
 
-    item = m_array[m_front];
     m_front = (m_front + 1) & m_max_size;
+    item = m_array[m_front];
     m_size--;
 
     m_mutex.unlock();
@@ -153,8 +153,8 @@ bool block_queue<T>::pop(T& item, int ms_timeout) {
         return false;
     }
 
-    item = m_array[m_front];
     m_front = (m_front + 1) & m_max_size;
+    item = m_array[m_front];
     m_size--;
 
     m_mutex.unlock();

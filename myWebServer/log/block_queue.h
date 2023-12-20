@@ -30,13 +30,18 @@ public:
     bool pop(T& item, int ms_timeout);
 
 private:
+    /*这里的锁有两个作用：
+    1. 保护条件变量
+    2. 保护阻塞队列的私有变量*/
     locker m_mutex;
     cond m_cond;
 
     T *m_array;
     int m_size;
     int m_max_size;
+    // 指向队首前一个位置
     int m_front;
+    // 指向队尾
     int m_back;
 };
 
