@@ -107,7 +107,7 @@ void log::write_log(int level, const char* format, ...) {
     int m = snprintf(m_buf + n, m_buf_size - n - 1, format, valst);
     m_buf[n+m] = '\n';
     m_buf[n+m+1] = '\0';
-    log_str = m_buf;
+    log_str = m_buf; 
 
     m_mutex.unlock();
 
