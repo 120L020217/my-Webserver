@@ -124,3 +124,46 @@ void sort_timer_lst::add_timer(util_timer *timer, util_timer *lst_head) {
         tail = timer;
     }
 }
+
+void Utils::init(int timeslot) {
+    m_TIMESLOT = timeslot;
+}
+
+int Utils::setnoblocking(int fd) {
+    int old_option = fcntl(fd, F_GETFL); // 文件描述符旧的状态标志
+    int new_option = old_option | O_NONBLOCK; // 非阻塞
+    fcntl(fd, F_SETFL, new_option); // 设置文件描述符的状态标志
+    return old_option;
+}
+
+void Utils::addfd(int epollfd, int fd, bool one_shot, bool TRIGMode) {
+    epoll_event event;
+    event.data.fd = fd;
+
+    if (1 == TRIGMode) {
+        event.events = EPOLLIN | EPOLLET | EPOLLRDHUP;
+    }  else {
+        event.events = EPOLLIN | EPOLLRDHUP;
+    }
+
+    if (one_shot) {
+        event.events |= EPOLLONESHOT;
+    }
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &event);
+    setnoblocking(fd);
+}
+
+void Utils::sig_handler(int sig) {
+
+}
+
+void Utils::addsig(int fd) {
+
+}
+
+void Utils::timer_handler() {
+
+}
+
+int *Utils::u_pipefd = nullptr;
+int Utils::u_epollfd = 0;

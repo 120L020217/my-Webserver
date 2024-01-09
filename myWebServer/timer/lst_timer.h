@@ -18,6 +18,8 @@
 #include <sys/epoll.h>
 #include <pthread.h>
 
+#include "../log/log.h"
+
 #define BUFFER_SIZE 64
 class util_timer; /*前向声明*/
 
@@ -65,6 +67,37 @@ private:
     util_timer *tail;
 };
 
+class Utils {
+public:
+    Utils() {}
+    ~Utils() {}
 
+    void init(int timeslot);
+
+    // 对文件描述符设置非阻塞，否则线程阻塞在网络io函数send、recv上。
+    int setnoblocking(int fd);
+    
+    // 注册epoll事件，
+    // one_shot:开启EPOLLONWESHOT，文件描述符上监听的事件只能被触发一次
+    // 避免了因事件多次到来（默认ET模式下）不同工作线程依次响应，使得多个线程操作一个文件描述符
+    // TRIGMode：et模式orlt模式，1是et模式。
+    void addfd(int epollfd, int fd, bool one_shot, bool TRIGMode);
+
+    //TODO:为什么是静态函数：因为要使用静态成员变量u_pipefd
+    static void sig_handler(int sig);
+
+    void addsig(int sig);
+
+    void timer_handler();
+
+    //TODO:showerror函数用在何处
+
+public:
+    //TODO:为什么是静态变量
+    static int *u_pipefd;
+    static int u_epollfd;
+    sort_timer_lst m_timer_list;
+    int m_TIMESLOT; // 定时器定时时间，多久后发送信号
+};
 
 #endif
