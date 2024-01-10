@@ -83,17 +83,17 @@ public:
     // TRIGMode：et模式orlt模式，1是et模式。
     void addfd(int epollfd, int fd, bool one_shot, bool TRIGMode);
 
-    //TODO:为什么是静态函数：因为要使用静态成员变量u_pipefd
+    //为什么是静态函数：因为要使用静态成员变量u_pipefd
     static void sig_handler(int sig);
 
     void addsig(int sig);
 
     void timer_handler();
 
-    //TODO:showerror函数用在何处
+    //TODO:showerror函数用在何处?
 
 public:
-    //TODO:为什么是静态变量
+    //TODO:为什么是静态变量?
     static int *u_pipefd;
     static int u_epollfd;
     sort_timer_lst m_timer_list;

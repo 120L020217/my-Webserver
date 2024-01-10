@@ -487,7 +487,7 @@ int pthread_cond_broadcast(pthread_cond_t cond);
 ```cpp
 sem_t
 // pshared：表明信号量用在多线程之间还是多进程之间
-int sem_int(sem_t *sem, int pshared, unsigned int value);
+int sem_init(sem_t *sem, int pshared, unsigned int value);
 int sem_destroy(sem_t* sem);
 // 原子操作的方式将信号量减1，如果信号量为0，线程阻塞
 int sem_wait(sem_t *sem);

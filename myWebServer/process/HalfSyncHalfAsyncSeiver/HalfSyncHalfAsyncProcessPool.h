@@ -104,7 +104,7 @@ static void addsig(int sig, void (handler)(int), bool restart = true) { // 传�
     assert(sigaction(sig, &sa, NULL) != -1);
 }
 
-// TODO: 多进程和线程池类的关系:每个进程都有一个指向进程池对象的指针，这些进程池对象是相互对立的	
+// 多进程和线程池类的关系:每个进程都有一个指向进程池对象的指针，这些进程池对象是相互对立的	
 // 监听socket listenfd需要在创建进程池之前创建好
 template<typename T>
 processpool<T>::processpool(int listenfd, int process_number) : 
@@ -132,7 +132,7 @@ processpool<T>::processpool(int listenfd, int process_number) :
     }
 }
 
-// TODO: 管道写端设置为非阻塞，读端在addfd中也设为非阻塞
+// 管道写端设置为非阻塞，读端在addfd中也设为非阻塞
 // sig_pipefd是一个全局静态的管道
 template<typename T>
 void processpool<T>::setup_sig_pipe() {
@@ -163,11 +163,11 @@ void processpool<T>::run() {
 
 template<typename T>
 void processpool<T>::run_child() {
-    // TODO: 用处：开一个epoll模型，设置好信号管道，加入epoll
+    // 用处：开一个epoll模型，设置好信号管道，加入epoll
     setup_sig_pipe();  
 
     int pipefd = m_sub_process[m_idx].m_pipefd[1];
-    // TODO: 子进程找到与父进程连接的管道，加入epoll
+    // 子进程找到与父进程连接的管道，加入epoll
     addfd(m_epollfd, pipefd);
 
     epoll_event events[MAX_EVENT_NUMBER];
@@ -200,7 +200,7 @@ void processpool<T>::run_child() {
                     }
                     addfd(m_epollfd, connfd);
 
-                    // TODO: 模板类必须实现init方法，初始化一个客户链接？
+                    // 模板类必须实现init方法，初始化一个客户链接
                     // 我们直接用connfd索引逻辑处理对象（即T对象），提高程序效率
                     // 每个子进程可以处理多个用户，用users数组表示处理的用户集合，用connfd表示不同用户
                     users[connfd].init(m_epollfd, connfd, client_address);
@@ -242,7 +242,7 @@ void processpool<T>::run_child() {
 
     delete[] users;
     users = nullptr;
-    // TODO: 还有sig_pipe，connfd 没有被销毁
+    // 还有sig_pipe，connfd 没有被销毁
     // connfd在removefd函数中被销毁
     close(pipefd);
     // close(m_listenfd); /* 应有创建listenfd的创建者来销毁*/
