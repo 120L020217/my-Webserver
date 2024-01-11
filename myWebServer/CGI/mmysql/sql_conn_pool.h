@@ -56,9 +56,9 @@ public:
 
 class connectionRAII {
 public:
-    // TODO: 为什么用二级指针？ 能想到的原因是他要修改mysql指针的指向，才会用二级指针
+    // 为什么用二级指针？ 原因是他要修改mysql指针的指向，才会用二级指针
     connectionRAII(MYSQL** con, connection_pool* connPool) {
-        *con = connPool->GetConnection();
+        *con = connPool->GetConnection(); // 改变指针指向,指向了数据库连接池中的一个链接
         conRAII = *con;
         poolRAII = connPool;
     }
