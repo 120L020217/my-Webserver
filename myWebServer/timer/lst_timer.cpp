@@ -129,7 +129,7 @@ void Utils::init(int timeslot) {
     m_TIMESLOT = timeslot;
 }
 
-int Utils::setnoblocking(int fd) {
+int Utils::setnonblocking(int fd) {
     int old_option = fcntl(fd, F_GETFL); // 文件描述符旧的状态标志
     int new_option = old_option | O_NONBLOCK; // 非阻塞
     fcntl(fd, F_SETFL, new_option); // 设置文件描述符的状态标志
@@ -150,7 +150,7 @@ void Utils::addfd(int epollfd, int fd, bool one_shot, bool TRIGMode) {
         event.events |= EPOLLONESHOT;
     }
     epoll_ctl(epollfd, EPOLL_CTL_ADD, fd, &event);
-    setnoblocking(fd);
+    setnonblocking(fd);
 }
 
 void Utils::sig_handler(int sig) {

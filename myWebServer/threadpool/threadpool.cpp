@@ -81,8 +81,8 @@ void threadpool<T>::run() {
         if (!request) {
             continue;
         }
-        if (1 == m_actor_model) { // proactor
-            if (0 == request->state) { // 读请求
+        if (1 == m_actor_model) { // reactor
+            if (0 == request->m_state) { // 读请求
                 if (request->read_once()) {
                     request->improv = 1;
                     // 取一个数据库连接
@@ -102,7 +102,7 @@ void threadpool<T>::run() {
                     request->timer_flag = 1;
                 }
             }
-        } else { // reactor: 直接交给request类处理, 包括数据的读写
+        } else { // proactor: 直接交给request类处理, 包括数据的读写
             connectionRAII mysqlcon(&request->mysql, m_connPool);
             // TODO: request如何判断是否已经完成数据读写
             request->process();

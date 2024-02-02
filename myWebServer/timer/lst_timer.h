@@ -75,7 +75,7 @@ public:
     void init(int timeslot);
 
     // 对文件描述符设置非阻塞，否则线程阻塞在网络io函数send、recv上。
-    int setnoblocking(int fd);
+    int setnonblocking(int fd);
     
     // 注册epoll事件，
     // one_shot:开启EPOLLONWESHOT，文件描述符上监听的事件只能被触发一次
