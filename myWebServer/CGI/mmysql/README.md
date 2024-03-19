@@ -19,6 +19,6 @@ for (int i = 0; i < MaxConn; i++) {
         connList.push_back(con);
         ++m_FreeConn;
     }
-} // 执行完毕，mysql对象不会析构，再cAPI中，mysql连接对象的生命周期由程序员管理
+} // 执行完毕，mysql对象不会析构，因为con是一个指针，指向一个mysql对象，类似new一个对象的情况，mysql对象的销毁在mysql_close(con)执行。
 
 ```
