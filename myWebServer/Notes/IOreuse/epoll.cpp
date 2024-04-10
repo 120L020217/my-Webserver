@@ -69,7 +69,7 @@ void et(epoll_event* events, int number, int epollfd, int listenfd) {
     printf("et\n");
     char buf[BUFFER_SIZE];
     for (int i = 0; i < number; i++) {
-        printf("the %d turn of proceeding data\n", i);
+        printf("Turn %d/%d of proceeding data\n", i+1, number);
         int sockfd = events[i].data.fd;
         if (sockfd == listenfd) {
             printf("accept a new connection\n");
@@ -79,21 +79,25 @@ void et(epoll_event* events, int number, int epollfd, int listenfd) {
             addfd(epollfd, connfd, true);
         } else if (events[i].events & EPOLLIN) {
             /* 不会被触发，循环读数据，是数据全部读出*/
-            printf("event trigger once\n");
+            printf("event was triggered once\n");
             while (1) {
                 memset(buf, '\0', BUFFER_SIZE);
                 int ret = recv(sockfd, buf, BUFFER_SIZE - 1, 0);
                 if (ret < 0) {
-                    /*还有数据没读完*/
-                    if ( errno == EAGAIN || errno == EWOULDBLOCK) {
+                    if (errno == EAGAIN || errno == EWOULDBLOCK) {
                         printf("read later\n");
                         break;
+                    } else if (errno == EINTR) {
+                        continue;
+                    } else {
+                        close(sockfd);
+                        break;
                     }
-                    close(sockfd);
-                    break;
                 } else if (ret == 0) {
                     close(sockfd);
+                    break;
                 } else {
+                    buf[ret] = '\0'; // Ensure null-terminated
                     printf("get %d bytes of content: %s\n", ret, buf);
                 }
             }
