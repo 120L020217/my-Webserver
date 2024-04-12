@@ -62,7 +62,7 @@ public:
     ~http_conn() {};
 public:
     // 初始化新接受的连接
-    void init(int sockfd, const sockaddr_in &addr, char*, int, int, string user, string passwd, string sqlname);
+    void init(int sockfd, const sockaddr_in &addr, char*, int, string user, string passwd, string sqlname);
     // 关闭连接
     void close_conn(bool real_close = true);
     // 处理客户请求
@@ -157,7 +157,6 @@ private:
     // TODO: 实际上没用？
     map<string, string> m_users;
     int m_TRIGMode;
-    int m_close_log;
 
     char sql_user[100];
     char sql_passwd[100];

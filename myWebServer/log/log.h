@@ -35,6 +35,9 @@ public:
     // 刷缓存，持久化日志
     void flush();
 
+    bool is_log_closed() const {
+        return m_close_log;
+    }
 private:
     log() : m_count(0), m_is_async(false) {}
     virtual ~log() {
@@ -82,10 +85,10 @@ private:
     
 };
 
-#define LOG_DEBUG(format, ...) if (0 == m_close_log) { log::get_instance()->write_log(0, format, ##__VA_ARGS__); log::get_instance()->flush(); }
-#define LOG_INFO(format, ...) if (0 == m_close_log) { log::get_instance()->write_log(1, format, ##__VA_ARGS__); log::get_instance()->flush(); }
-#define LOG_WARN(format, ...) if (0 == m_close_log) { log::get_instance()->write_log(2, format, ##__VA_ARGS__); log::get_instance()->flush(); }
-#define LOG_ERROR(format, ...) if (0 == m_close_log) { log::get_instance()->write_log(3, format, ##__VA_ARGS__); log::get_instance()->flush(); }
+#define LOG_DEBUG(format, ...) if (!log::get_instance()->is_log_closed()) { log::get_instance()->write_log(0, format, ##__VA_ARGS__); log::get_instance()->flush(); }
+#define LOG_INFO(format, ...) if (!log::get_instance()->is_log_closed()) { log::get_instance()->write_log(1, format, ##__VA_ARGS__); log::get_instance()->flush(); }
+#define LOG_WARN(format, ...) if (!log::get_instance()->is_log_closed()) { log::get_instance()->write_log(2, format, ##__VA_ARGS__); log::get_instance()->flush(); }
+#define LOG_ERROR(format, ...) if (!log::get_instance()->is_log_closed()) { log::get_instance()->write_log(3, format, ##__VA_ARGS__); log::get_instance()->flush(); }
 
 
 #endif

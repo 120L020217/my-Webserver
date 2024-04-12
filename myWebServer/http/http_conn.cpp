@@ -20,12 +20,11 @@ void http_conn::close_conn(bool real_close) {
 }
 
 void http_conn::init(int sockfd, const sockaddr_in &addr, char* root, int TRIGMode,
-                     int close_log, string user, string passwd, string sqlname) {
+                     string user, string passwd, string sqlname) {
     m_sockfd = sockfd;
     m_address = addr;
     doc_root = root;
     m_TRIGMode = TRIGMode;
-    m_close_log = close_log;
 
     strcpy(sql_user, user.c_str());
     strcpy(sql_passwd, passwd.c_str());

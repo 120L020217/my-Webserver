@@ -22,7 +22,7 @@ public:
         return &instance;
     }
 
-    void init(string url, string User, string PassWord, string DatabaseName, int port, int MaxConn, int close_log);
+    void init(string url, string User, string PassWord, string DatabaseName, int port, int MaxConn);
 
     MYSQL* GetConnection(); // 获取一个可用连接
     bool ReleaseConnection(MYSQL* conn); // 释放连接
@@ -51,15 +51,12 @@ public:
     string m_User;
     string m_PassWord;
     string m_DatabaseName;
-    int m_close_log; // 日志开关
 };
 
 class connectionRAII {
 public:
-    // 为什么用二级指针？ 原因是他要修改mysql指针的指向，才会用二级指针
-    connectionRAII(MYSQL** con, connection_pool* connPool) {
-        *con = connPool->GetConnection(); // 改变指针指向,指向了数据库连接池中的一个链接
-        conRAII = *con;
+    connectionRAII(connection_pool* connPool) {
+        conRAII = connPool->GetConnection();
         poolRAII = connPool;
     }
     ~connectionRAII() {
