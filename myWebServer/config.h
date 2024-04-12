@@ -42,6 +42,11 @@ public:
 
     //并发模型选择
     int actor_model;
+
+    //数据库信息
+    string database_user;
+    string database_passwd;
+    string database_name;
 };
 
 #endif

@@ -80,7 +80,7 @@ public:
     // 注册epoll事件，
     // one_shot:开启EPOLLONWESHOT，文件描述符上监听的事件只能被触发一次
     // 避免了因事件多次到来（默认ET模式下）不同工作线程依次响应，使得多个线程操作一个文件描述符
-    // TRIGMode：et模式orlt模式，1是et模式。
+    // TRIGMode：et模式or lt模式，1是et模式。
     void addfd(int epollfd, int fd, bool one_shot, bool TRIGMode);
 
     //为什么是静态函数：因为要使用静态成员变量u_pipefd

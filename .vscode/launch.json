@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "C/C++: gcc build active file",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
-            "args": ["172.22.18.81", "12345"],
+            "args": ["172.27.25.162", "12345"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

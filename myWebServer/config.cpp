@@ -30,6 +30,11 @@ Config::Config(){
 
     //并发模型,默认是proactor
     actor_model = 0;
+
+    // 数据库信息
+    database_user = "root";
+    database_passwd = "@281531090";
+    database_name = "tinywebserver";
 }
 
 void Config::parse_arg(int argc, char*argv[]){

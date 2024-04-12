@@ -72,7 +72,7 @@ public:
     // TODO:非阻塞写（reactor模式用）
     bool write();
 
-    sockaddr_in* get_aaddress() { return &m_address; }
+    sockaddr_in* get_address() { return &m_address; }
     // TODO:以下三行作用分别是什么
     void initmysql_result(connection_pool* connPool);
     int timer_flag;
@@ -109,9 +109,9 @@ public:
     static int m_user_count;
     // 将从数据库连接池中取一个连接
     MYSQL* mysql;
-    // 涉及proactor下的数据io。
+    // 涉及reactor下的数据io。
     // 0--客户数据到来，把数据读到读缓冲区，等待工作线程处理
-    // 1--工作线程处理完毕，把数据从写缓冲区写到socket，发送给客户
+    // 1--TODO:                 工作线程处理完毕，把数据从写缓冲区写到socket，发送给客户
     int m_state;
 private:
     // 该HTTP的连接socket
