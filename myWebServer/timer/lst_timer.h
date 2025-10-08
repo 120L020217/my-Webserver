@@ -96,7 +96,7 @@ public:
     //TODO:为什么是静态变量?
     static int *u_pipefd;
     static int u_epollfd;
-    sort_timer_lst m_timer_list;
+    sort_timer_lst m_timer_lst;
     int m_TIMESLOT; // 定时器定时时间，多久后发送信号
 };
 

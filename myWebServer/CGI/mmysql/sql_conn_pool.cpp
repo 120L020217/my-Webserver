@@ -1,12 +1,11 @@
 #include "sql_conn_pool.h"
 
-void connection_pool::init(string url, string User, string PassWord, string DatabaseName, int port, int MaxConn, int close_log) {
+void connection_pool::init(string url, string User, string PassWord, string DatabaseName, int port, int MaxConn) {
     m_url = url;
     m_User = User;
     m_Port = port;
     m_PassWord = PassWord;
     m_DatabaseName = DatabaseName;
-    m_close_log = close_log;
 
     for (int i = 0; i < MaxConn; i++) {
         MYSQL* con = mysql_init(nullptr); // 初始化一个 MYSQL 对象

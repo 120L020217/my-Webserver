@@ -165,5 +165,6 @@ void Utils::timer_handler() {
 
 }
 
+// TODO: 这两个类中定义的静态成员变量在类外定义和初始化
 int *Utils::u_pipefd = nullptr;
 int Utils::u_epollfd = 0;

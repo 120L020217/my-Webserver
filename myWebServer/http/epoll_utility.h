@@ -1,4 +1,9 @@
-#include "http_conn.h"
+#ifndef EPOLL_UTILITY_H
+#define EPOLL_UTILITY_H
+
+#include <unistd.h>
+#include <sys/epoll.h>
+#include <fcntl.h>
 
 int setnonblocking(int fd) {
     int old_option = fcntl(fd, F_GETFL);
@@ -41,3 +46,5 @@ void modfd(int epollfd, int fd, int ev, int TRIGMode) {
         event.events = ev | EPOLLONESHOT | EPOLLRDHUP;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, fd, &event);
 }
+
+#endif

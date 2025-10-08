@@ -103,7 +103,8 @@ private:
     bool add_linger();
     bool add_blank_line();
 public:
-    // 所有socket上的事件注册到同一个epollfd内核时间表中，所以将epollfd设置为静态的
+    // TODO: 观察这两个静态变量是否在类外定义和初始化
+    // 所有socket上的事件注册到同一个epollfd内核事件表中，所以将epollfd设置为静态的
     static int m_epollfd;
     // 统计用户数量
     static int m_user_count;

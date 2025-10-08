@@ -78,9 +78,9 @@ void WebServer::log_write()
     {
         //初始化日志
         if (1 == m_log_write)
-            Log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 800);
+            log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 800);
         else
-            Log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 0);
+            log::get_instance()->init("./ServerLog", m_close_log, 2000, 800000, 0);
     }
 }
 
@@ -172,7 +172,7 @@ void WebServer::timer(int connfd, struct sockaddr_in client_address)
     time_t cur = time(NULL);
     timer->expire = cur + 3 * TIMESLOT;
     users_timer[connfd].timer = timer;
-    utils.m_timer_lst.add_timer(timer);
+    utils.m_timer_list.add_timer(timer);
 }
 
 //若有数据传输，则将定时器往后延迟3个单位
